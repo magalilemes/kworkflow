@@ -128,7 +128,8 @@ function install_modules()
     module_target='*.tar'
   fi
 
-  cmd_manager "$flag" "tar -C /lib/modules -xf $module_target"
+  cmd_manager "$flag" "mkdir -p /lib/modules/${module_target%.*}"
+  cmd_manager "$flag" "tar -C /lib/modules/${module_target%.*} -xf $module_target"
   ret="$?"
 
   if [[ "$ret" != 0 ]]; then

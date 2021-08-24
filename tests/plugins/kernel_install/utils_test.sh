@@ -172,11 +172,13 @@ function test_do_uninstall_cmd_sequence()
 function test_install_modules()
 {
   local module_target='5.9.0-rc5-NEW-VRR-TRACK+.tar'
-  local cmd
+  declare -a expected_cmd=(
+    "mkdir -p /lib/modules/${module_target%.*}"
+    "tar -C /lib/modules/${module_target%.*} -xf $module_target"
+  )
 
   output=$(install_modules "$module_target" 'TEST_MODE')
-  cmd="tar -C /lib/modules -xf $module_target"
-  assert_equals_helper 'Standard uncompression' "$LINENO" "$cmd" "$output"
+  compare_command_sequence 'expected_cmd' "$output" "$LINENO"
 }
 
 function test_vm_update_boot_loader_debian()
